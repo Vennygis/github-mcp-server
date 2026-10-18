@@ -1,0 +1,184 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Node.js Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+- name: Setup Node.js environment
+  uses: actions/setup-node@v7.1.0
+  with:
+    # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
+    node-version: # optional
+    # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions, mise.toml.
+    node-version-file: # optional
+    # Target architecture for Node to use. Examples: x86, x64. Will use system architecture by default.
+    architecture: # optional
+    # Set this option if you want the action to check for the latest available version that satisfies the version spec.
+    check-latest: # optional
+    # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN.
+    registry-url: # optional
+    # Optional scope for authenticating against scoped registries. Will fall back to the repository owner when using the GitHub Packages registry (https://npm.pkg.github.com/).
+    scope: # optional
+    # Used to pull node distributions from node-versions. Since there's a default, this is typically not supplied by the user. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
+    token: # optional, default is ${{ github.server_url == 'https://github.com' && github.token || '' }}
+    # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm.
+    cache: # optional
+    # Set to false to disable automatic caching. By default, caching is enabled when either devEngines.packageManager or the top-level packageManager field in package.json specifies npm as the package manager.
+    package-manager-cache: # optional, default is true
+    # Used to specify the path to a dependency file: package-lock.json, yarn.lock, etc. Supports wildcards or a list of file names for caching multiple dependencies.
+    cache-dependency-path: # optional
+    # Used to specify an alternative mirror to download Node.js binaries from
+    mirror: # optional
+    # The token used as Authorization header when fetching from the mirror
+    mirror-token: # optional- name: Autometrics Report
+  # You may pin to the exact commit or the version.
+  # uses: autometrics-dev/diff-metrics@778b3281f8446790af0afd766d5bb236defb5dde
+  uses: autometrics-dev/diff-metrics@v2.1.0
+  with:
+    # Github token to use
+    gh-token: 
+    # The list of rust project roots to check. One path per line
+    rs-roots: # optional
+    # The list of typescript project roots to check. One path per line
+    ts-roots: # optional
+    # The list of golang project roots to check. One path per line
+    go-roots: # optional
+    # The list of python project roots to check. One path per line
+    py-roots: # optional
+    # The number of days to keep the artifacts for. Defaults to 0 (inherits the policy from the repository)
+    retention-days: # optional, default is 0
+    # The version of am to download, skip patch or minor to act as a wildcard. "0.2" means ">=0.2.0 && <0.3.0", "1" means ">=1.0.0 && <2.0.0", etc.
+    am-version: # optional- name: ActivitySmith.com
+  # You may pin to the exact commit or the version.
+  # uses: ActivitySmithHQ/activitysmith-github-action@32d9c98c95aed4fb090007e78131be9870546e06
+  uses: ActivitySmithHQ/activitysmith-github-action@v0.1.0
+  with:
+    # Choose the action to perform: start_live_activity, update_live_activity, end_live_activity, send_push_notification.
+    action: 
+    # The authentication value used with the ActivitySmith API.
+    api-key: 
+    # If the step exits with an error on errors or continues.
+    errors: # optional, default is false
+    # ID of the live activity (required for update/ending)
+    live-activity-id: # optional
+    # Attributes that create the content of the request using JSON or YAML.
+    payload: # optional
+    # Field seperator for nested attributes in the input payload.
+    payload-delimiter: # optional
+    # Path to a file containing a valid input payload made of JSON or YAML.
+    payload-file-path: # optional- name: SDP CI Integration
+  # You may pin to the exact commit or the version.
+  # uses: opentext/sdp-github-actions-integration@70702e2f103ff12a4be0e02e09bade9760805725
+  uses: opentext/sdp-github-actions-integration@v26.4.0
+  with:
+    # Url of OpenText SDP / SDM instance
+    octaneUrl: 
+    # Shared Space ID
+    octaneSharedSpace: 
+    # Workspace ID
+    octaneWorkspace: 
+    # OpenText SDP / SDM API Access Client ID
+    octaneClientId: 
+    # OpenText SDP / SDM API Access Client Secret
+    octaneClientSecret: 
+    # GitHub PAT
+    gitHubToken: 
+    # URL of the organization/repository in GitHub
+    serverBaseUrl: 
+    # Pattern to build pipeline names
+    pipelineNamePattern: 
+    # Pattern to search unit test result report files in artifacts
+    unitTestResultsGlobPattern: # optional
+    # Pattern to search Gherkin test result report files in artifacts
+    gherkinTestResultsGlobPattern: # optional
+    # Testing framework to use for the test runner
+    testingFramework: # optional
+    # Sets the log level (1-5): 1-trace, 2-debug, 3-info, 4-warn, 5-error
+    logLevel: # optional, default is 3- name: Load runner information
+  # You may pin to the exact commit or the version.
+  # uses: devops-actions/load-runner-info@a067f205538cf4690b35b0e224e983c29cc21ecb
+  uses: devops-actions/load-runner-info@v2.0.1
+  with:
+    # Slug of the organization to analyze.
+    organization: 
+    # Slug of the repository to analyze.
+    repo: # optional
+    # Access token to use for analysis with either admin:org or repo owner if you run it against a repo
+    accessToken: - name: Application observability for AWS
+  # You may pin to the exact commit or the version.
+  # uses: aws-actions/application-observability-for-aws@3ad2bc7d604dc6853b503f18ad4d5495dcf4ee08
+  uses: aws-actions/application-observability-for-aws@v1.2.1
+  with:
+    # The bot name to respond to in comments (e.g., @awsapm)
+    bot_name: # optional, default is @awsapm
+    # The branch to merge PRs into (defaults to repository default branch)
+    target_branch: # optional
+    # Prefix for branches created by the action (e.g., 'awsapm/', 'awsapm-')
+    branch_prefix: # optional, default is awsapm/
+    # Comma-separated list of GitHub usernames allowed to use this action even without write access. Empty string (default) means only users with write/admin access can use it. The single value '*' allows ANY user to trigger the action, which removes the trust boundary entirely - see docs/security.md before using it.
+    allowed_non_write_users: # optional, default is 
+    # GitHub token to use for API calls. If not provided, uses the default GitHub Actions token.
+    github_token: # optional, default is ${{ github.token }}
+    # Custom instructions to guide the AI agent's analysis and actions
+    custom_prompt: # optional, default is 
+    # CLI tool to use for investigation
+    cli_tool: # optional, default is claude_code
+    # Path to AI agent execution output file (used to post results back to GitHub). For claude_code path, pass this from claude-code-base-action outputs in a second call to this action.
+    output_file: # optional
+    # Execution status from AI agent (success or failure). Only used when output_file is provided.
+    output_status: # optional
+    # GitHub comment ID to update with results (required for Step 3 - pass from Step 1 output: steps.prepare.outputs.awsapm_comment_id)
+    comment_id: # optional
+    # Enable CloudWatch MCP server for metrics, alarms, and log insights
+    enable_cloudwatch_mcp: # optional, default is true
+    # Enable integration test mode (internal use only)
+    test_mode: # optional, default is fals- name: Yor GitHub Action
+  # You may pin to the exact commit or the version.
+  # uses: bridgecrewio/yor-action@04bf3da0c4e8619a307c023ce8f0d196a2d8a4ee
+  uses: bridgecrewio/yor-action@0.3.0
+  with:
+    # directory with infrastructure code to scan
+    directory: # optional, default is .
+    # Run scan on all checks but a specific check identifier (comma separated)
+    tag_groups: # optional
+    # comma delimited list of yor tags to apply
+    tag: # optional
+    # comma delimited list of yor tags to not apply
+    skip_tags: # optional
+    # comma delimited list of paths for yor to skip tagging of
+    skip_dirs: # optional
+    # comma delimited list of paths to external (custom) tags & tag groups plugins
+    custom_tags: # optional
+    # The format of the output. cli, json
+    output_format: # optional
+    # log level
+    log_level: # optional
+    # Choose whether the action will commit changes. Changes will be commited if this is exactly "YES"
+    commit_changes: # optional, default is truee
